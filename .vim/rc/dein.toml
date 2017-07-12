@@ -1,0 +1,20 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+[[plugins]]
+repo = 'Townk/vim-autoclose'
+[[plugins]]
+repo = 'tomasr/molokai'
+[[plugins]]
+repo = 'wlangstroth/vim-racket'
+[[plugins]]
+repo = 'scrooloose/syntastic.git'
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+[[plugins]]
+repo = 'kannokanno/previm'
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+[[plugins]]
+repo = 'iamcco/mathjax-support-for-mkdp'
+[[plugins]]
+repo = 'iamcco/markdown-preview.vim'
