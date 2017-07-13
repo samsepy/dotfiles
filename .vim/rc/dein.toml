@@ -18,3 +18,5 @@ repo = 'tyru/open-browser.vim'
 repo = 'iamcco/mathjax-support-for-mkdp'
 [[plugins]]
 repo = 'iamcco/markdown-preview.vim'
+[[plugins]]
+repo = 'itchyny/lightline.vim'

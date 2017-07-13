@@ -32,12 +32,15 @@ endif
 " display settings
 syntax on
 colorscheme molokai
+let g:lightline = {
+      \ 'colorscheme': 'molokai',
+      \ }
+set laststatus=2
 set background=dark
 set number
 set ruler
 set cursorline
 set showmatch
-set laststatus=2
 
 " move cursor settings
 set backspace=indent,eol,start

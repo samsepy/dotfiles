@@ -1,4 +1,4 @@
- #!/bin/zsh
+ #!/bin/bash
 
   DOT_FILES=(.vimrc .vim …)
 
