@@ -69,16 +69,33 @@ set expandtab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-" set smartindent
+set smartindent
 set cindent
 set autoindent
+if has("autocmd")
+  " enable filetype
+  filetype plugin on
+  " use indent matching file type
+  filetype indent on
+  autocmd FileType c           setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType js          setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
+endif
 
 " os/env settings
 set clipboard=unnamed,unnamedplus
 set shellslash
 set wildmenu
 
-" command mode settings
+" command-mode settings
 set wildmenu wildmode=list:longest,full
 set history=10000
 
