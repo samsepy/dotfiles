@@ -41,6 +41,8 @@ set number
 set ruler
 set cursorline
 set showmatch
+set colorcolumn=80
+" set term=screen-256color
 
 " move cursor settings
 set backspace=indent,eol,start
@@ -78,7 +80,6 @@ if has("autocmd")
   " use indent matching file type
   filetype indent on
   autocmd FileType c           setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
   autocmd FileType js          setlocal sw=4 sts=4 ts=4 et
   autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
@@ -87,6 +88,7 @@ if has("autocmd")
   autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType java        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
 endif
 
