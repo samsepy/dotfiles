@@ -90,6 +90,8 @@ if has("autocmd")
   autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType java        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType rust        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType markdown    setlocal sw=2 sts=2 ts=2 et
 endif
 
 " os/env settings
