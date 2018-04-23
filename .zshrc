@@ -127,7 +127,7 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
-alias open='o'
+alias o='open'
 
 alias mkdir='mkdir -p'
 
