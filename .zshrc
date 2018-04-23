@@ -127,6 +127,8 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
+alias open='o'
+
 alias mkdir='mkdir -p'
 
 # sudo の後のコマンドでエイリアスを有効にする
