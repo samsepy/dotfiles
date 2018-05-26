@@ -202,3 +202,6 @@ export PATH="$PATH:$HOME/.jncc"
 
 # octpress
 setopt nonomatch
+
+# キー無効
+bindkey -r '^J'
