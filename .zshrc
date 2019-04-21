@@ -13,7 +13,7 @@ autoload -Uz colors
 colors
 
 # vi 風キーバインドにする
-bindkey -v
+# bindkey -v
 
 # ヒストリの設定
 HISTFILE=~/.zsh_history
@@ -207,3 +207,7 @@ setopt nonomatch
 
 # キー無効
 bindkey -r '^J'
+
+# others
+export PATH="/usr/local/opt/libiconv/bin:$PATH"
+export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
