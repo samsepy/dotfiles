@@ -13,7 +13,7 @@ autoload -Uz colors
 colors
 
 # vi 風キーバインドにする
-bindkey -v
+# bindkey -v
 
 # ヒストリの設定
 HISTFILE=~/.zsh_history
@@ -207,3 +207,12 @@ setopt nonomatch
 
 # キー無効
 bindkey -r '^J'
+export PATH="/usr/local/opt/ncurses/bin:$PATH"
+export PATH="/usr/local/opt/ncurses/bin:$PATH"
+
+# nodebrew
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+# direnv
+export EDITOR=vim
+eval "$(direnv hook zsh)"
