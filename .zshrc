@@ -207,6 +207,8 @@ setopt nonomatch
 
 # キー無効
 bindkey -r '^J'
+
+# ncurses
 export PATH="/usr/local/opt/ncurses/bin:$PATH"
 export PATH="/usr/local/opt/ncurses/bin:$PATH"
 
@@ -216,3 +218,7 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 # direnv
 export EDITOR=vim
 eval "$(direnv hook zsh)"
+
+# others
+export PATH="/usr/local/opt/libiconv/bin:$PATH"
+export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
