@@ -222,3 +222,4 @@ eval "$(direnv hook zsh)"
 # others
 export PATH="/usr/local/opt/libiconv/bin:$PATH"
 export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
+
