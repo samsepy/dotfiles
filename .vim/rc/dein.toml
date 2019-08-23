@@ -20,3 +20,5 @@ repo = 'iamcco/mathjax-support-for-mkdp'
 repo = 'iamcco/markdown-preview.vim'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
+[[plugins]]
+repo = 'mattn/emmet-vim'
