@@ -107,3 +107,7 @@ inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap (<Enter> ()<Left><CR><ESC><S-o>
 nnoremap ; :
+
+" emmet-vim
+let g:user_emmet_leader_key='<C-e>'
+
