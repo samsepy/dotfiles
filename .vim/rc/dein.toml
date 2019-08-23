@@ -22,3 +22,5 @@ repo = 'iamcco/markdown-preview.vim'
 repo = 'itchyny/lightline.vim'
 [[plugins]]
 repo = 'mattn/emmet-vim'
+[[plugins]]
+repo = 'hail2u/vim-css3-syntax'
