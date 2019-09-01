@@ -227,3 +227,4 @@ export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 
+export PATH="/usr/local/sbin:$PATH"
