@@ -24,3 +24,9 @@ repo = 'itchyny/lightline.vim'
 repo = 'mattn/emmet-vim'
 [[plugins]]
 repo = 'hail2u/vim-css3-syntax'
+[[plugins]]
+repo = 'Shougo/neocomplete.vim'
+[[plugins]]
+repo = 'Shougo/neosnippet'
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
