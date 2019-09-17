@@ -228,3 +228,4 @@ source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.in
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 
 export PATH="/usr/local/sbin:$PATH"
+export PATH="$PATH:$HOME/.ban2hst"
