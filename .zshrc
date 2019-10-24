@@ -219,13 +219,13 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 export EDITOR=vim
 eval "$(direnv hook zsh)"
 
-# others
-export PATH="/usr/local/opt/libiconv/bin:$PATH"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
-
 # gcloud
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 
+# others
+export PATH="/usr/local/opt/libiconv/bin:$PATH"
+export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="$PATH:$HOME/.ban2hst"
+export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
