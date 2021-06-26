@@ -228,3 +228,30 @@ export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="$PATH:$HOME/.ban2hst"
 export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+
+
+########################################
+# OS 別の設定
+if (( $+commands[arch] )); then
+  alias a64="exec arch -arch arm64e '$SHELL'"
+  alias x64="exec arch -arch x86_64 '$SHELL'"
+fi
+
+function runs_on_ARM64() { [[ `uname -m` = "arm64" ]]; }
+function runs_on_X86_64() { [[ `uname -m` = "x86_64" ]]; }
+
+BREW_PATH_OPT="/opt/homebrew/bin"
+BREW_PATH_LOCAL="/usr/local/bin"
+function brew_exists_at_opt() { [[ -d ${BREW_PATH_OPT} ]]; }
+function brew_exists_at_local() { [[ -d ${BREW_PATH_LOCAL} ]]; }
+
+setopt no_global_rcs
+typeset -U path PATH
+path=($path /usr/sbin /sbin)
+
+if runs_on_ARM64; then
+  path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
+else
+  path=($BREW_PATH_LOCAL(N-/) $path)
+fi
+
