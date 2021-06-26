@@ -231,7 +231,7 @@ export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 
 
 ########################################
-# OS 別の設定
+# M1 Macの設定
 if (( $+commands[arch] )); then
   alias a64="exec arch -arch arm64e '$SHELL'"
   alias x64="exec arch -arch x86_64 '$SHELL'"
