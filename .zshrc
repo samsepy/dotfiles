@@ -219,10 +219,6 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 export EDITOR=vim
 eval "$(direnv hook zsh)"
 
-# gcloud
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-
 # imagemagick
 export PKG_CONFIG_PATH=/usr/local/opt/imagemagick@6/lib/pkgconfig
 
