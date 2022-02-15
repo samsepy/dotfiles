@@ -232,3 +232,17 @@ export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="$PATH:$HOME/.ban2hst"
 export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+
+# mysql周り
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+
+# postgresql
+export PGDATA=/usr/local/var/postgres
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# when installed sdl2
+export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
+
