@@ -49,10 +49,6 @@ inoremap <expr><BS> neocomplete#smart_close_popup()."<C-h>"
 
 " display settings
 syntax on
-colorscheme molokai
-let g:lightline = {
-      \ 'colorscheme': 'molokai',
-      \ }
 set laststatus=2
 set background=dark
 set number
