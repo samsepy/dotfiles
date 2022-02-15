@@ -24,7 +24,7 @@ SAVEHIST=1000000
 # 1行表示
 # PROMPT="%~ %# "
 # 2行表示
-PROMPT="%{${fg[green]}%}[%n@%m]%{${reset_color}%} %~
+PROMPT="%{${fg[green]}%}%~%{${reset_color}%}
 %# "
 
 
@@ -219,10 +219,6 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 export EDITOR=vim
 eval "$(direnv hook zsh)"
 
-# gcloud
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-
 # imagemagick
 export PKG_CONFIG_PATH=/usr/local/opt/imagemagick@6/lib/pkgconfig
 
@@ -246,3 +242,27 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 # when installed sdl2
 export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
 
+########################################
+# M1 Macの設定
+if (( $+commands[arch] )); then
+  alias a64="exec arch -arch arm64e '$SHELL'"
+  alias x64="exec arch -arch x86_64 '$SHELL'"
+fi
+
+function runs_on_ARM64() { [[ `uname -m` = "arm64" ]]; }
+function runs_on_X86_64() { [[ `uname -m` = "x86_64" ]]; }
+
+BREW_PATH_OPT="/opt/homebrew/bin"
+BREW_PATH_LOCAL="/usr/local/bin"
+function brew_exists_at_opt() { [[ -d ${BREW_PATH_OPT} ]]; }
+function brew_exists_at_local() { [[ -d ${BREW_PATH_LOCAL} ]]; }
+
+setopt no_global_rcs
+typeset -U path PATH
+path=($path /usr/sbin /sbin)
+
+if runs_on_ARM64; then
+  path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
+else
+  path=($BREW_PATH_LOCAL(N-/) $path)
+fi
