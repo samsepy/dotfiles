@@ -196,6 +196,9 @@ fi
 # pyenv
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
+# rbenv
+export PATH="$HOME/.anyenv/envs/rbenv/shims:$PATH"
+
 # vim
 # export PATH=/usr/local/bin:/usr/bin
 
