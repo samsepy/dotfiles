@@ -269,3 +269,15 @@ if runs_on_ARM64; then
 else
   path=($BREW_PATH_LOCAL(N-/) $path)
 fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/hajimetodo/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hajimetodo/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/hajimetodo/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hajimetodo/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Added by Windsurf
+export PATH="/Users/hajimetodo/.codeium/windsurf/bin:$PATH"
+
+# Added by Windsurf
+export PATH="/Users/hajimetodo/.codeium/windsurf/bin:$PATH"
