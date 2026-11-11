@@ -1,1 +1,0 @@
-/Users/samsepy/dotfiles/.tmux/

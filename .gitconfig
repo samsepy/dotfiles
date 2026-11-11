@@ -1,0 +1,20 @@
+# ==============================================================================
+# .gitconfig - Git 基本設定
+# ==============================================================================
+
+[user]
+	name = samsepy
+	email = samsepylot@gmail.com
+
+[core]
+	quotepath = false
+
+[init]
+	defaultBranch = main
+
+[fetch]
+	prune = true
+
+# マシン固有の設定（GPG署名鍵や業務用メール等）があれば読み込む
+[include]
+	path = ~/.gitconfig.local

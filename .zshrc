@@ -1,63 +1,35 @@
-# Created by newuser for 5.2
-# 少し凝った zshrc
-# License : MIT
-# http://mollifier.mit-license.org/
+# ==============================================================================
+# .zshrc - インタラクティブシェル設定
+# ==============================================================================
 
-########################################
-# 環境変数
+# ------------------------------------------------------------------------------
+# 基本環境変数・PATH初期化
+# ------------------------------------------------------------------------------
 export LANG=ja_JP.UTF-8
+export EDITOR=vim
 
+# PATHの重複を自動除去
+typeset -U path PATH
 
-# 色を使用出来るようにする
-autoload -Uz colors
-colors
+# Homebrew (非ログインシェルで .zprofile が未読込の場合のフォールバック)
+if [[ -z "${HOMEBREW_PREFIX}" ]]; then
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+fi
 
-# vi 風キーバインドにする
-# bindkey -v
+# ------------------------------------------------------------------------------
+# 外観・プロンプト・VCS表示
+# ------------------------------------------------------------------------------
+autoload -Uz colors && colors
 
-# ヒストリの設定
-HISTFILE=~/.zsh_history
-HISTSIZE=1000000
-SAVEHIST=1000000
-
-# プロンプト
-# 1行表示
-# PROMPT="%~ %# "
-# 2行表示
+# 2行表示プロンプト (カレントディレクトリ + プロンプト記号)
 PROMPT="%{${fg[green]}%}%~%{${reset_color}%}
 %# "
 
-
-# 単語の区切り文字を指定する
-autoload -Uz select-word-style
-select-word-style default
-# ここで指定した文字は単語区切りとみなされる
-# / も区切りと扱うので、^W でディレクトリ１つ分を削除できる
-zstyle ':zle:*' word-chars " /=;@:{},|"
-zstyle ':zle:*' word-style unspecified
-
-########################################
-# 補完
-# 補完機能を有効にする
-autoload -Uz compinit
-compinit
-
-# 補完で小文字でも大文字にマッチさせる
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# ../ の後は今いるディレクトリを補完しない
-zstyle ':completion:*' ignore-parents parent pwd ..
-
-# sudo の後ろでコマンド名を補完する
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
-                   /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
-
-# ps コマンドのプロセス名補完
-zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
-
-
-########################################
-# vcs_info
+# 右プロンプトにGitブランチ・状態を自動表示
 autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
 
@@ -70,56 +42,83 @@ function _update_vcs_info_msg() {
 }
 add-zsh-hook precmd _update_vcs_info_msg
 
+# ------------------------------------------------------------------------------
+# ヒストリ設定
+# ------------------------------------------------------------------------------
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=1000000
+SAVEHIST=1000000
 
-########################################
-# オプション
-# 日本語ファイル名を表示可能にする
-setopt print_eight_bit
+# ------------------------------------------------------------------------------
+# シェルオプション・単語区切り
+# ------------------------------------------------------------------------------
+# 単語区切り文字の定義 ('/' も区切りとみなし ^W で1階層ずつ削除可能にする)
+autoload -Uz select-word-style
+select-word-style default
+zstyle ':zle:*' word-chars " /=;@:{},|"
+zstyle ':zle:*' word-style unspecified
 
-# beep を無効にする
-setopt no_beep
+setopt print_eight_bit       # 日本語ファイル名を表示可能にする
+setopt no_beep               # ビープ音を無効化する
+setopt no_flow_control       # フローコントロール (Ctrl+S/Ctrl+Q) を無効化する
+setopt ignore_eof            # Ctrl+D でシェルを終了しない
+setopt interactive_comments  # コマンドラインでも '#' 以降をコメントとして扱う
+setopt auto_cd               # ディレクトリ名のみで cd する
+setopt auto_pushd            # cd 時に自動でディレクトリスタックへ追加する
+setopt pushd_ignore_dups     # 重複したディレクトリをスタックに追加しない
+setopt share_history         # 複数ターミナル間でヒストリをリアルタイム共有する
+setopt hist_ignore_all_dups  # 重複するコマンドは古い方を削除する
+setopt hist_ignore_space     # スペース始まりのコマンドはヒストリに残さない
+setopt hist_reduce_blanks    # ヒストリ保存時に余分なスペースを詰める
+setopt extended_glob         # 高機能なワイルドカード展開を有効化する
+setopt nonomatch             # glob が一致しない場合のエラーを抑止する
 
-# フローコントロールを無効にする
-setopt no_flow_control
+# ------------------------------------------------------------------------------
+# 補完設定
+# ------------------------------------------------------------------------------
+autoload -Uz compinit && compinit
 
-# Ctrl+Dでzshを終了しない
-setopt ignore_eof
+# 小文字入力でも大文字にマッチさせる
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# '#' 以降をコメントとして扱う
-setopt interactive_comments
+# '../' の後はカレントディレクトリを補完候補に出さない
+zstyle ':completion:*' ignore-parents parent pwd ..
 
-# ディレクトリ名だけでcdする
-setopt auto_cd
+# sudo の後ろでコマンド名を補完する
+zstyle ':completion:*:sudo:*' command-path \
+    /opt/homebrew/sbin /opt/homebrew/bin \
+    /usr/local/sbin /usr/local/bin \
+    /usr/sbin /usr/bin /sbin /bin
 
-# cd したら自動的にpushdする
-setopt auto_pushd
-# 重複したディレクトリを追加しない
-setopt pushd_ignore_dups
+# ps コマンドのプロセス名補完
+zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 
-# 同時に起動したzshの間でヒストリを共有する
-setopt share_history
-
-# 同じコマンドをヒストリに残さない
-setopt hist_ignore_all_dups
-
-# スペースから始まるコマンド行はヒストリに残さない
-setopt hist_ignore_space
-
-# ヒストリに保存するときに余分なスペースを削除する
-setopt hist_reduce_blanks
-
-# 高機能なワイルドカード展開を使用する
-setopt extended_glob
-
-########################################
-# キーバインド
-
-# ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
+# ------------------------------------------------------------------------------
+# キーバインド・ファジー検索連携
+# ------------------------------------------------------------------------------
+# ^R でワイルドカード対応の履歴インクリメンタル検索
 bindkey '^R' history-incremental-pattern-search-backward
+# ^J のデフォルトバインドを解除
+bindkey -r '^J'
 
-########################################
+# ghq + fzf でリポジトリに素早く移動 (^G)
+if (( $+commands[ghq] && $+commands[fzf] )); then
+    function _ghq_fzf_cd() {
+        local dir
+        dir="$(ghq list -p | fzf --reverse --height=40%)"
+        if [[ -n "$dir" ]]; then
+            BUFFER="cd ${(q)dir}"
+            zle accept-line
+        fi
+        zle reset-prompt
+    }
+    zle -N _ghq_fzf_cd
+    bindkey '^G' _ghq_fzf_cd
+fi
+
+# ------------------------------------------------------------------------------
 # エイリアス
-
+# ------------------------------------------------------------------------------
 alias la='ls -a'
 alias ll='ls -l'
 
@@ -128,156 +127,105 @@ alias cp='cp -i'
 alias mv='mv -i'
 
 alias o='open'
-
 alias mkdir='mkdir -p'
 
-# sudo の後のコマンドでエイリアスを有効にする
+# sudo の後のコマンドでもエイリアスを有効化する
 alias sudo='sudo '
 
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G='| grep'
 
-# historyの履歴削除
-alias hc='rm -f ~/.zsh_history && re'
-
-# r実行用
-alias rlang='/usr/local/bin/r'
-
-# シェルの再起動
-alias re='exec -l $SHELL'
-
-# brew常用コマンド
-alias bl='brew update && brew upgrade && brew cleanup'
-
-# よく使うdateコマンドオプション
-alias dt='date "+%Y-%m-%d"'
-
-#その他
-alias brew="env PATH=${PATH/\/Users\/${USER}\/\.anyenv\/envs\/pyenv\/shims:/} brew"
-
-# C で標準出力をクリップボードにコピーする
-# mollifier delta blog : http://mollifier.hatenablog.com/entry/20100317/p1
-if which pbcopy >/dev/null 2>&1 ; then
-    # Mac
+# 標準出力をクリップボードへコピーするグローバルエイリアス (Mac / Linux / Cygwin 対応)
+if (( $+commands[pbcopy] )); then
     alias -g C='| pbcopy'
-elif which xsel >/dev/null 2>&1 ; then
-    # Linux
+elif (( $+commands[xsel] )); then
     alias -g C='| xsel --input --clipboard'
-elif which putclip >/dev/null 2>&1 ; then
-    # Cygwin
+elif (( $+commands[putclip] )); then
     alias -g C='| putclip'
 fi
 
+# ユーティリティエイリアス
+alias hc='rm -f ~/.zsh_history && re'
+alias re='exec -l $SHELL'
+alias bl='brew update && brew upgrade && brew cleanup'
+alias dt='date "+%Y-%m-%d"'
 
+# Apple Silicon / Rosetta アーキテクチャ切替
+if (( $+commands[arch] )) && [[ "$(uname -s)" == "Darwin" ]]; then
+    alias a64="exec arch -arch arm64e '$SHELL'"
+    alias x64="exec arch -arch x86_64 '$SHELL'"
+fi
 
-########################################
-# OS 別の設定
-case ${OSTYPE} in
+# OS別の ls カラー設定
+case "${OSTYPE}" in
     darwin*)
-        #Mac用の設定
         export CLICOLOR=1
         alias ls='ls -G -F'
         ;;
     linux*)
-        #Linux用の設定
         alias ls='ls -F --color=auto'
         ;;
 esac
 
-# vim:set ft=zsh:
+# ------------------------------------------------------------------------------
+# 各種ツール・言語ランタイム (存在する環境のみ有効化)
+# ------------------------------------------------------------------------------
+# ユーザーローカルバイナリ・エディタCLI
+[[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
+[[ -d "$HOME/.antigravity/antigravity/bin" ]] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+[[ -d "$HOME/.codeium/windsurf/bin" ]] && export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 
-# anyenv
-if [ -d $HOME/.anyenv ] ; then
+# Homebrew keg-only パッケージ
+if [[ -n "${HOMEBREW_PREFIX}" ]]; then
+    [[ -d "${HOMEBREW_PREFIX}/opt/postgresql@14/bin" ]] && export PATH="${HOMEBREW_PREFIX}/opt/postgresql@14/bin:$PATH"
+    [[ -d "${HOMEBREW_PREFIX}/opt/mysql-client/bin" ]] && export PATH="${HOMEBREW_PREFIX}/opt/mysql-client/bin:$PATH"
+    [[ -d "${HOMEBREW_PREFIX}/lib" ]] && export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}${HOMEBREW_PREFIX}/lib"
+fi
+
+# anyenv (rbenv / nodenv 等)
+if [[ -d "$HOME/.anyenv" ]]; then
     export PATH="$HOME/.anyenv/bin:$PATH"
     eval "$(anyenv init -)"
+    [[ -d "$HOME/.anyenv/envs/rbenv/shims" ]] && export PATH="$HOME/.anyenv/envs/rbenv/shims:$PATH"
 fi
-
-# pyenv
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
-# rbenv
-export PATH="$HOME/.anyenv/envs/rbenv/shims:$PATH"
-
-# vim
-# export PATH=/usr/local/bin:/usr/bin
-
-# jncc
-export PATH="$PATH:$HOME/.jncc"
-
-# octpress
-setopt nonomatch
-
-# キー無効
-bindkey -r '^J'
-
-# ncurses
-export PATH="/usr/local/opt/ncurses/bin:$PATH"
-export PATH="/usr/local/opt/ncurses/bin:$PATH"
-
-# nodebrew
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-
 # direnv
-export EDITOR=vim
-eval "$(direnv hook zsh)"
-
-# imagemagick
-export PKG_CONFIG_PATH=/usr/local/opt/imagemagick@6/lib/pkgconfig
-
-# others
-export PATH="/usr/local/opt/libiconv/bin:$PATH"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
-export PATH="$PATH:$HOME/.ban2hst"
-export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
-
-# mysql周り
-export PATH="/usr/local/opt/openssl/bin:$PATH"
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
-
-# postgresql
-export PGDATA=/usr/local/var/postgres
-
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-# when installed sdl2
-export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
-
-########################################
-# M1 Macの設定
-if (( $+commands[arch] )); then
-  alias a64="exec arch -arch arm64e '$SHELL'"
-  alias x64="exec arch -arch x86_64 '$SHELL'"
+if (( $+commands[direnv] )); then
+    eval "$(direnv hook zsh)"
 fi
 
-function runs_on_ARM64() { [[ `uname -m` = "arm64" ]]; }
-function runs_on_X86_64() { [[ `uname -m` = "x86_64" ]]; }
+# Yarn
+[[ -d "$HOME/.yarn/bin" ]] && export PATH="$HOME/.yarn/bin:$PATH"
 
-BREW_PATH_OPT="/opt/homebrew/bin"
-BREW_PATH_LOCAL="/usr/local/bin"
-function brew_exists_at_opt() { [[ -d ${BREW_PATH_OPT} ]]; }
-function brew_exists_at_local() { [[ -d ${BREW_PATH_LOCAL} ]]; }
-
-setopt no_global_rcs
-typeset -U path PATH
-path=($path /usr/sbin /sbin)
-
-if runs_on_ARM64; then
-  path=($BREW_PATH_OPT(N-/) $BREW_PATH_LOCAL(N-/) $path)
-else
-  path=($BREW_PATH_LOCAL(N-/) $path)
+# Bun
+if [[ -d "$HOME/.bun" ]]; then
+    export BUN_INSTALL="$HOME/.bun"
+    export PATH="$BUN_INSTALL/bin:$PATH"
+    [[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
 fi
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/hajimetodo/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hajimetodo/google-cloud-sdk/path.zsh.inc'; fi
+# Pulumi
+[[ -d "$HOME/.pulumi/bin" ]] && export PATH="$PATH:$HOME/.pulumi/bin"
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/hajimetodo/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hajimetodo/google-cloud-sdk/completion.zsh.inc'; fi
+# Google Cloud SDK
+[[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc"
+[[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]] && source "$HOME/google-cloud-sdk/completion.zsh.inc"
 
-# Added by Windsurf
-export PATH="/Users/hajimetodo/.codeium/windsurf/bin:$PATH"
+# Claude Code 切替エイリアス (AWSプロファイル等は ~/.zshrc.local で上書き可能)
+alias claude-sub="CLAUDE_CODE_USE_BEDROCK=0 CLAUDE_CONFIG_DIR=$HOME/.claude-main claude"
+alias claude-bedrock='CLAUDE_CODE_USE_BEDROCK=1 AWS_REGION="${CLAUDE_BEDROCK_AWS_REGION:-ap-northeast-1}" AWS_PROFILE="${CLAUDE_BEDROCK_AWS_PROFILE}" CLAUDE_CONFIG_DIR="$HOME/.claude-bedrock" claude'
 
-# Added by Windsurf
-export PATH="/Users/hajimetodo/.codeium/windsurf/bin:$PATH"
+# ------------------------------------------------------------------------------
+# マシン固有設定の読み込み (Git管理外)
+# ------------------------------------------------------------------------------
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+# SDKMAN (仕様上ファイルの末尾付近で読み込む)
+if [[ -d "$HOME/.sdkman" ]]; then
+    export SDKMAN_DIR="$HOME/.sdkman"
+    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
+
+# vim:set ft=zsh:
