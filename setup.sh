@@ -15,6 +15,7 @@ DOT_FILES=(
     .tmux.conf
     .gitconfig
     .config/git/ignore
+    .config/starship.toml
 )
 
 for file in "${DOT_FILES[@]}"; do

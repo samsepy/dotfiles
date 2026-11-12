@@ -47,6 +47,8 @@ brew "pulumi"
 brew "reattach-to-user-namespace"
 # Install various Ruby versions and implementations
 brew "ruby-build"
+# Cross-shell prompt for astronauts
+brew "starship"
 # Terminal multiplexer
 brew "tmux"
 # Display directories as trees (with optional color/HTML output)
@@ -55,6 +57,10 @@ brew "tree"
 brew "uv"
 # Feature-rich command-line audio/video downloader
 brew "yt-dlp"
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+# Fish shell like syntax highlighting for zsh
+brew "zsh-syntax-highlighting"
 # Ghostty-based terminal with vertical tabs and notifications for AI coding agents
 cask "cmux"
 cask "graphiql"

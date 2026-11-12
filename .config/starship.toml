@@ -1,0 +1,69 @@
+# ==============================================================================
+# .config/starship.toml - Starship プロンプト設定
+# ==============================================================================
+
+# 2行表示プロンプト構成 (1行目: パス・Git・言語情報・実行時間 / 2行目: 入力行)
+format = """
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$ruby\
+$python\
+$golang\
+$rust\
+$cmd_duration\
+$line_break\
+$character"""
+
+# プロンプト間の空行を無効化し、従来のコンパクトな2行表示を維持
+add_newline = false
+
+# タイムアウト設定 (大規模リポジトリでもプロンプトが遅延しないように調整)
+command_timeout = 1000
+
+# ------------------------------------------------------------------------------
+# 基本モジュール
+# ------------------------------------------------------------------------------
+[directory]
+style = "green"
+truncation_length = 5
+truncate_to_repo = false
+
+[character]
+success_symbol = "[%](bold white)"
+error_symbol = "[%](bold red)"
+
+[cmd_duration]
+min_time = 2000
+format = "took [$duration]($style) "
+style = "yellow"
+
+# ------------------------------------------------------------------------------
+# Git 表示
+# ------------------------------------------------------------------------------
+[git_branch]
+format = "on [$symbol$branch]($style) "
+style = "bold purple"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "bold red"
+
+# ------------------------------------------------------------------------------
+# 言語ランタイム表示 (プロジェクトディレクトリ内でのみ自動表示)
+# ------------------------------------------------------------------------------
+[nodejs]
+format = "via [⬢ $version](bold green) "
+
+[ruby]
+format = "via [💎 $version](bold red) "
+
+[python]
+format = 'via [🐍 ${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+
+[golang]
+format = "via [🐹 $version](bold cyan) "
+
+[rust]
+format = "via [🦀 $version](bold red) "

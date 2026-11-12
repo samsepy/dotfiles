@@ -21,28 +21,6 @@ if [[ -z "${HOMEBREW_PREFIX}" ]]; then
 fi
 
 # ------------------------------------------------------------------------------
-# 外観・プロンプト・VCS表示
-# ------------------------------------------------------------------------------
-autoload -Uz colors && colors
-
-# 2行表示プロンプト (カレントディレクトリ + プロンプト記号)
-PROMPT="%{${fg[green]}%}%~%{${reset_color}%}
-%# "
-
-# 右プロンプトにGitブランチ・状態を自動表示
-autoload -Uz vcs_info
-autoload -Uz add-zsh-hook
-
-zstyle ':vcs_info:*' formats '%F{green}(%s)-[%b]%f'
-zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
-
-function _update_vcs_info_msg() {
-    LANG=en_US.UTF-8 vcs_info
-    RPROMPT="${vcs_info_msg_0_}"
-}
-add-zsh-hook precmd _update_vcs_info_msg
-
-# ------------------------------------------------------------------------------
 # ヒストリ設定
 # ------------------------------------------------------------------------------
 HISTFILE="$HOME/.zsh_history"
@@ -74,9 +52,14 @@ setopt extended_glob         # 高機能なワイルドカード展開を有効�
 setopt nonomatch             # glob が一致しない場合のエラーを抑止する
 
 # ------------------------------------------------------------------------------
-# 補完設定
+# 補完設定 (日次キャッシュによる高速化)
 # ------------------------------------------------------------------------------
-autoload -Uz compinit && compinit
+autoload -Uz compinit
+if [[ -n "$HOME/.zcompdump"(#qN.mh+24) ]]; then
+    compinit
+else
+    compinit -C
+fi
 
 # 小文字入力でも大文字にマッチさせる
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -183,10 +166,10 @@ if [[ -n "${HOMEBREW_PREFIX}" ]]; then
     [[ -d "${HOMEBREW_PREFIX}/lib" ]] && export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}${HOMEBREW_PREFIX}/lib"
 fi
 
-# anyenv (rbenv / nodenv 等)
+# anyenv (起動高速化のため --no-rehash を指定)
 if [[ -d "$HOME/.anyenv" ]]; then
     export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init -)"
+    eval "$(anyenv init - --no-rehash)"
     [[ -d "$HOME/.anyenv/envs/rbenv/shims" ]] && export PATH="$HOME/.anyenv/envs/rbenv/shims:$PATH"
 fi
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
@@ -216,6 +199,36 @@ fi
 # Claude Code 切替エイリアス (AWSプロファイル等は ~/.zshrc.local で上書き可能)
 alias claude-sub="CLAUDE_CODE_USE_BEDROCK=0 CLAUDE_CONFIG_DIR=$HOME/.claude-main claude"
 alias claude-bedrock='CLAUDE_CODE_USE_BEDROCK=1 AWS_REGION="${CLAUDE_BEDROCK_AWS_REGION:-ap-northeast-1}" AWS_PROFILE="${CLAUDE_BEDROCK_AWS_PROFILE}" CLAUDE_CONFIG_DIR="$HOME/.claude-bedrock" claude'
+
+# ------------------------------------------------------------------------------
+# プロンプト (Starship があれば優先、なければ標準の2行プロンプト + vcs_info)
+# ------------------------------------------------------------------------------
+if (( $+commands[starship] )) && [[ "${TERM}" != "dumb" ]]; then
+    eval "$(starship init zsh)"
+else
+    autoload -Uz colors && colors
+    PROMPT="%{${fg[green]}%}%~%{${reset_color}%}
+%# "
+    autoload -Uz vcs_info
+    autoload -Uz add-zsh-hook
+    zstyle ':vcs_info:*' formats '%F{green}(%s)-[%b]%f'
+    zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
+    function _update_vcs_info_msg() {
+        LANG=en_US.UTF-8 vcs_info
+        RPROMPT="${vcs_info_msg_0_}"
+    }
+    add-zsh-hook precmd _update_vcs_info_msg
+fi
+
+# ------------------------------------------------------------------------------
+# Zsh プラグイン (入力補完・構文ハイライト - インストール済み環境のみ有効化)
+# ------------------------------------------------------------------------------
+if [[ -n "${HOMEBREW_PREFIX}" ]]; then
+    [[ -f "${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && \
+        source "${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    [[ -f "${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && \
+        source "${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
 
 # ------------------------------------------------------------------------------
 # マシン固有設定の読み込み (Git管理外)
